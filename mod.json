@@ -1,12 +1,12 @@
 {
-	"geode": "4.0.1",
+	"geode": "4.1.2",
 	"gd": {
         "win": "2.2074",
         "android": "2.2074",
         "mac": "2.2074",
         "ios": "2.2074"
     	},
-	"version": "v1.0.9",
+	"version": "v1.0.11",
 	"id": "beat.click_sounds_lite",
 	"name": "Click Sounds Lite",
 	"developers": ["Beat", "Dwang-ML"],
@@ -23,7 +23,8 @@
 	},
 	"links": {
 		"community": "https://discord.gg/tu98bsGA32",
-		"source": "https://github.com/clicksounds/geode-clicksoundslite"
+		"source": "https://github.com/clicksounds/geode-clicksoundslite",
+		"homepage": "https://clicksounds.xyz/"
 	},
 	"tags": [
 		"universal",

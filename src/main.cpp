@@ -3,8 +3,32 @@
 #include <Geode/modify/PauseLayer.hpp>
 #include <Geode/ui/GeodeUI.hpp>
 #include <Geode/loader/SettingV3.hpp>
+#include <Geode/modify/MenuLayer.hpp>
 
 using namespace geode::prelude;
+
+class $modify(MenuLayer){
+    bool init(){
+        MenuLayer::init();
+        if (Mod::get()->getSavedValue<bool>("viewedCSFullPopup")){
+            return true;
+        }
+        auto popup = createQuickPopup(
+        "Click Sounds Lite",
+        "The full version of Click Sounds is now available.\nFind it on the Geode downloads page.",
+        "Never show", "Got it",
+        [this](auto, bool btn2) {
+            if (btn2) {
+                Mod::get()->setSavedValue<bool>("viewedCSFullPopup", false);
+            } else {
+                Mod::get()->setSavedValue<bool>("viewedCSFullPopup", true);
+            }
+        }, false);
+        popup->m_scene = this;
+        popup->show();
+        return true;
+    }
+};
 
 // Custom class for Caching sounds (Make it less laggy for mobile platforms and such)
 class SoundCache {
@@ -35,6 +59,7 @@ static FMOD::Channel* Soundchannel;
 static SoundCache* ClickSound = new SoundCache();
 static SoundCache* ReleaseSound = new SoundCache();
 
+// integritycheck copied from cs full, added cs lite 1.0.11
 // the check to see if you should play the sound or not
 bool integrityCheck(PlayerObject* object, PlayerButton Pressed) {
     // play sounds when "only play on jump" settings is enabled and the player input is a jump, left movement, or right movement.
@@ -57,7 +82,11 @@ bool integrityCheck(PlayerObject* object, PlayerButton Pressed) {
         }
         Level = Pl->m_level;
      };
-     if (object->m_isSecondPlayer && Level->m_twoPlayerMode || !object->m_isSecondPlayer) {
+    GJBaseGameLayer* LayerCheck = GJBaseGameLayer::get();
+     if (!LayerCheck) {
+        return false;
+     }
+     if (Level->m_twoPlayerMode && LayerCheck->m_player2 == object || LayerCheck->m_player1 == object) {
         return true;
      } else {
         return false;
